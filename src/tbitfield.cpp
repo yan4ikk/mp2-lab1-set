@@ -85,7 +85,10 @@ void TBitField::clrBit(const size_t n) // очистить бит
 
 bool TBitField::getBit(const size_t n) const // получить значение бита
 {
-    if (n >= bitLen) throw "Out of range";
+    if (n >= bitLen)
+    {
+        throw "Out of range";
+    }
     return pMem[getIndex(n)] & getMask(n);
 }
 
