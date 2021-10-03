@@ -11,7 +11,7 @@
 
 TBitField::TBitField(size_t len)
 {
-   
+
 }
 
 TBitField::TBitField(const TBitField &bf) // конструктор копирования
@@ -24,13 +24,18 @@ size_t TBitField::getIndex(const size_t n) const  // индекс в pМем д�
     return 0;
 }
 
-uint TBitField::getMask(const size_t n) const // битовая маска для бита n
+elType TBitField::getMask(const size_t n) const // битовая маска для бита n
 {
     return 0;
 }
 
 // доступ к битам битового поля
-uint TBitField::getLength() const // получить длину (к-во битов)
+size_t TBitField::getLength() const // получить длину (к-во битов)
+{
+    return 0;
+}
+
+size_t TBitField::getNumBytes() const // получить количество байт выделенной памяти
 {
     return 0;
 }
