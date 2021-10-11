@@ -49,3 +49,16 @@ TEST(TBitField, can_not_set_bit_after_last_2)
     TBitField field(n);
     ASSERT_ANY_THROW(field.setBit(n));
 }
+
+TEST(TBitField, can_set_half_bits)
+{
+    const size_t num_el = 1;
+    const size_t n = sizeof(elType) * 8 * num_el;
+    TBitField field(n);
+    for (size_t i = 0; i < field.getLength() / 2; i++)
+        field.setBit(i);
+    for (size_t i = 0; i < field.getLength() / 2; i++)
+        ASSERT_EQ(field.getBit(i), true);
+    for (size_t i = field.getLength() / 2; i < field.getLength(); i++)
+        ASSERT_EQ(field.getBit(i), false);
+}
