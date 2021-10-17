@@ -272,3 +272,56 @@ TEST(TBitField, bitfields_with_different_bits_are_not_equal)
 
     EXPECT_NE(bf1, bf2);
 }
+
+TEST(TBitField, can_set_bit_large)
+{
+    TBitField bf(120);
+
+    EXPECT_EQ(false, bf.getBit(89));
+
+    bf.setBit(89);
+    EXPECT_NE(false, bf.getBit(89));
+}
+
+TEST(TBitField, can_clear_bit_large)
+{
+    TBitField bf(129);
+    uint bitIdx = 115;
+
+    bf.setBit(bitIdx);
+    EXPECT_NE(false, bf.getBit(bitIdx));
+
+    bf.clrBit(bitIdx);
+    EXPECT_EQ(false, bf.getBit(bitIdx));
+}
+
+TEST(TBitField, throws_when_create_bitfield_with_negative_length)
+{
+    ASSERT_ANY_THROW(TBitField bf(-19););
+    ASSERT_ANY_THROW(TBitField bf(-84););
+}
+
+TEST(TBitField, can_assign_itself)
+{
+    const size_t size = 10;
+    TBitField bf(size);
+    for (size_t i = 0; i < size; i++)
+        bf.setBit(i);
+    TBitField testBf(bf);
+    bf = bf;
+    EXPECT_EQ(testBf, bf);
+}
+
+TEST(TBitField, new_bitfield_is_clear)
+{
+    TBitField field(100);
+    size_t sum = 0;
+    for (size_t i = 0; i < field.getLength(); ++i) sum += field.getBit(i);
+
+    EXPECT_EQ(sum, 0);
+}
+
+TEST(TBitField, not_positive_bit_lenght)
+{
+    EXPECT_ANY_THROW(TBitField bf(-50););
+}

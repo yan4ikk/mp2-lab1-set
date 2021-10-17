@@ -313,3 +313,26 @@ TEST(TSet, testCoutInsClearPlusMinus)
     set1 = set1 - 1;
     EXPECT_EQ(expSet, set1 + set + set1);
 }
+
+TEST(TSet, can_add_twice)
+{
+    const size_t size = 3;
+    TSet bf1(size), bf2(size), bf3(size);
+    bf2 = bf1 + 2;
+    bf2 = bf2 + 2;
+    bf3 = bf1 + 2;
+    EXPECT_EQ(bf2, bf3);
+
+}
+
+TEST(TSet, can_invert_large_set)
+{
+    const size_t size = 50;
+    TSet set(size), negSet(size), expNegSet(size);
+    set.insElem(30);
+    negSet = ~set;
+    for (size_t i = 0; i < size; i++) expNegSet.insElem(i);
+    expNegSet.delElem(30);
+
+    EXPECT_EQ(expNegSet, negSet);
+}
