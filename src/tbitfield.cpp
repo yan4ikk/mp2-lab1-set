@@ -15,7 +15,7 @@ TBitField::TBitField(size_t len)
 {
     bitLen = len;
     memLen = len / 32 + 1;
-    pMem = new uint[memLen];
+    pMem = new elType[memLen];
     for (int i = 0; i < memLen; i++)
     {
         pMem[i] = 0;
@@ -26,7 +26,7 @@ TBitField::TBitField(const TBitField& bf) // конструктор копиро
 {
     bitLen = bf.bitLen;
     memLen = bf.memLen;
-    pMem = new uint[memLen];
+    pMem = new elType[memLen];
     for (int i = 0; i < memLen; i++)
     {
         pMem[i] = bf.pMem[i];
@@ -38,15 +38,20 @@ size_t TBitField::getIndex(const size_t n) const  // индекс в pМем д�
     return (n / 32);
 }
 
-uint TBitField::getMask(const size_t n) const // битовая маска для бита n
+elType TBitField::getMask(const size_t n) const // битовая маска для бита n
 {
     return (1 << (n % 32));
 }
 
 // доступ к битам битового поля
-uint TBitField::getLength() const // получить длину (к-во битов)
+size_t TBitField::getLength() const // получить длину (к-во битов)
 {
     return bitLen;
+}
+
+size_t TBitField::getNumBytes() const // получить количество байт выделенной памяти
+{
+    return memLen * sizeof(elType);
 }
 
 void TBitField::setBit(const size_t n) // установить бит
@@ -56,7 +61,7 @@ void TBitField::setBit(const size_t n) // установить бит
         throw n;
     }
     int i = getIndex(n);
-    uint m = getMask(n);
+    elType m = getMask(n);
     pMem[i] |= m;
 }
 
@@ -67,7 +72,7 @@ void TBitField::clrBit(const size_t n) // очистить бит
         throw n;
     }
     int i = getIndex(n);
-    uint m = getMask(n);
+    elType m = getMask(n);
     pMem[i] = pMem[i] & (~m);
 }
 
@@ -86,7 +91,7 @@ TBitField& TBitField::operator=(const TBitField& bf) // присваивание
         delete[] pMem;
         bitLen = bf.bitLen;
         memLen = bf.memLen;
-        pMem = new uint[memLen];
+        pMem = new elType[memLen];
         for (i = 0; i < memLen; i++)
         {
             pMem[i] = bf.pMem[i];
