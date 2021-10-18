@@ -11,6 +11,7 @@
 
 TSet::TSet(size_t mp) : bitField(mp)
 {
+    if (maxPower < 0) throw maxPower;
     maxPower = mp;
 }
 

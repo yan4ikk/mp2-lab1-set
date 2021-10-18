@@ -10,15 +10,16 @@
 #include "tbitfield.h"
 
 
-
-TBitField::TBitField(size_t len)
+TBitField::TBitField(size_t len) :
+    bitLen(len),
+    memLen(0),
+    pMem(nullptr)
 {
-    bitLen = len;
-    memLen = len / 32 + 1;
-    pMem = new elType[memLen];
-    for (int i = 0; i < memLen; i++)
+    if (len != 0)
     {
-        pMem[i] = 0;
+        memLen = getIndex((len - 1)) + 1;
+        pMem = new elType[memLen];
+        for (size_t i = 0; i < memLen; ++i) pMem[i] = 0;
     }
 }
 
@@ -35,12 +36,15 @@ TBitField::TBitField(const TBitField& bf) // конструктор копиро
 
 size_t TBitField::getIndex(const size_t n) const  // индекс в pМем для бита n
 {
-    return (n / 32);
+    if (n < 0 || n >= bitLen) throw n;
+    return (n / (sizeof(elType) * 8));
 }
 
 elType TBitField::getMask(const size_t n) const // битовая маска для бита n
 {
-    return (1 << (n % 32));
+    if (n < 0 || n >= bitLen) throw n;
+
+    return elType(1) << (n % (sizeof(elType) * 8));
 }
 
 // доступ к битам битового поля
@@ -56,21 +60,15 @@ size_t TBitField::getNumBytes() const // получить количество �
 
 void TBitField::setBit(const size_t n) // установить бит
 {
-    if (n < 0 || n >= bitLen)
-    {
-        throw n;
-    }
-    int i = getIndex(n);
+    if (n < 0 || n >= bitLen) throw n;
     elType m = getMask(n);
+    size_t i = getIndex(n);
     pMem[i] |= m;
 }
 
 void TBitField::clrBit(const size_t n) // очистить бит
 {
-    if (n < 0 || n >= bitLen)
-    {
-        throw n;
-    }
+    if (n < 0 || n >= bitLen) throw n;
     int i = getIndex(n);
     elType m = getMask(n);
     pMem[i] = pMem[i] & (~m);
